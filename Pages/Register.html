@@ -1,0 +1,55 @@
+<Doctype!>
+<html>
+	<head>
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<!-- Latest compiled JavaScript -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<style>
+			input{text-align:center}
+		</style>
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+	</head>
+
+<body>
+	<script>
+		var socket = io.connect();
+		
+		socket.on('successfull',function(data){
+			alert(data.result);
+			window.location.href="http://192.168.1.102:8081/login";
+		});
+		socket.on('unsuccessfull',function(data){
+			alert(data.result);
+		});
+	
+		socket.on('disconnect',function(data){
+			alert("Disconnected");
+		});
+
+		function register(){
+			var email = document.getElementById('email').value;
+			var password = document.getElementById('password').value;
+			var confirm = document.getElementById('confirm').value;
+			
+			if(email==='' || password==='' || confirm===''){
+				alert('Enter all fields');
+			}else if(password!=confirm){
+				alert('Passwords do not match');			
+			}else{
+				socket.emit('register',{'email':email,'password':password});
+			}
+			
+		}
+	</script>
+	<div class="jumbotron text-center"><p>Welcome to chatroom registration</p></div>
+	<div class="container text-center">
+	<input type="text" name="email" id="email" placeholder="Username" /><br><br>
+	<input type="password" name="password" id="password" placeholder="Password" /><br><br>
+	<input type="password" name="confirm" id="confirm" placeholder="Confirm password" /><br><br><br>
+	<input type="button" value="Register" id="register" onClick="register()"/>
+	</div>
+</body>
+</html>

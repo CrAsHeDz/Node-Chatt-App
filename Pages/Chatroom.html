@@ -1,0 +1,35 @@
+<Doctype!>
+<html>
+<head>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+	<script>
+		var socket=io.connect();
+
+		socket.on('logged',function(data){
+			alert(data.result);
+		});
+		socket.on('update',function(data){
+			var list = data.result.length;
+			document.getElementById('list').innerHTML="";
+			for(var i=0;i<list;i++){				
+				document.getElementById('list').innerHTML += data.result[i]+'<br>';
+			}
+			
+		});
+
+		function login(){
+			var email = document.getElementById('email').value;
+			var password = document.getElementById('password').value;
+			socket.emit('login',{'email':email,'password':password});
+		}
+	</script>
+	<input type="text" name="email" id="email" /><br>
+	<input type="password" name="password" id="password" /><br>
+	<input type="button" value="Register" id="register" onClick="login()"/>
+	<div id="list"></div>
+</body>
+
+</html>

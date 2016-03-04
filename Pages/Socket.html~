@@ -1,0 +1,37 @@
+<Doctype!>
+<html>
+
+<head>
+	<title></title>
+<script src="/socket.io/socket.io.js"></script>
+
+</head>
+	<body>
+		<script>
+			var socket = io.connect();
+
+			socket.on('message',function(data){
+			document.getElementById('msg').innerHTML=data.message;
+			});
+
+			socket.on('error',function(data){
+			document.getElementById('msg').innerHTML=data.e;
+			});
+
+			socket.on('executed',function(data){
+			var cmd = document.getElementById('msg').innerHTML;
+			document.getElementById('msg').innerHTML=cmd+"<hr>"+data.executed;
+			});
+
+			socket.on('disconnect',function(data){
+			document.getElementById('msg').innerHTML="Disconnected!";
+			});
+			function Send(){			
+			socket.emit('command',{'cmd':document.getElementById('command').value});
+			}
+		</script>
+		<div id="msg"></div><br>
+		<input type="text" id="command" placeholder="Enter command" /><br>
+		<input type="button" value="Send" onClick="Send()"/>
+	</body>
+</html>
